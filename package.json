@@ -15,7 +15,7 @@
     "Getting",
     "Started"
   ],
-  "author": "Max Malherbe",
+  "author": "Stefan van Dijk",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.1",
@@ -33,6 +33,6 @@
     "browser-sync-webpack-plugin": "^1.2.0",
     "node-uuid": "^1.4.8",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^3.5.5"
+    "webpack": "^3.6.0"
   }
 }

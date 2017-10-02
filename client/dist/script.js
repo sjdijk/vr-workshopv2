@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,68 +70,77 @@
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var KeyView = function () {
-    function KeyView() {
+var Keyboard = function () {
+    function Keyboard() {
         var _this = this;
 
-        _classCallCheck(this, KeyView);
+        _classCallCheck(this, Keyboard);
 
-        this.left = false;
-        this.right = false;
-        this.up = false;
-        this.down = false;
-        document.addEventListener("keydown", function (keyBoardDown) {
-            if (keyBoardDown.keyCode === 39) {
-                _this.right = true;
+        this.props = {
+            left: false,
+            right: false,
+            up: false,
+            down: false
+        };
+
+        window.addEventListener("keydown", function (keyPress) {
+
+            if (keyPress.keyCode === 37) {
+                _this.props.left = true;
             }
-            if (keyBoardDown.keyCode === 37) {
-                _this.left = true;
+            if (keyPress.keyCode === 38) {
+
+                _this.props.up = true;
             }
-            if (keyBoardDown.keyCode === 38) {
-                _this.up = true;
+            if (keyPress.keyCode === 39) {
+                _this.props.right = true;
             }
-            if (keyBoardDown.keyCode === 40) {
-                _this.down = true;
+
+            if (keyPress.keyCode === 40) {
+                _this.props.down = true;
             }
         });
 
-        document.addEventListener("keyup", function (keyBoardUp) {
-
-            if (keyBoardUp.keyCode === 39) {
-                _this.right = false;
+        window.addEventListener("keyup", function (keyUp) {
+            if (keyUp.keyCode === 37) {
+                _this.props.left = false;
             }
-            if (keyBoardUp.keyCode === 37) {
-                _this.left = false;
+            if (keyUp.keyCode === 38) {
+                _this.props.up = false;
             }
-            if (keyBoardUp.keyCode === 38) {
-                _this.up = false;
+            if (keyUp.keyCode === 39) {
+                _this.props.right = false;
             }
-            if (keyBoardUp.keyCode === 40) {
-                _this.down = false;
+            if (keyUp.keyCode === 40) {
+                _this.props.down = false;
             }
         });
     }
 
-    _createClass(KeyView, [{
+    _createClass(Keyboard, [{
         key: "location",
         get: function get() {
             return {
-                left: this.left,
-                right: this.right,
-                up: this.up,
-                down: this.down
+                left: this.props.left,
+                right: this.props.right,
+                up: this.props.up,
+                down: this.props.down
             };
         }
     }]);
 
-    return KeyView;
+    return Keyboard;
 }();
 
-module.exports = KeyView;
+exports.default = Keyboard;
 
 /***/ }),
 /* 1 */
@@ -140,114 +149,93 @@ module.exports = KeyView;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _keyview = __webpack_require__(0);
+var _keyboard = __webpack_require__(0);
 
-var _keyview2 = _interopRequireDefault(_keyview);
-
-var _player = __webpack_require__(2);
-
-var _player2 = _interopRequireDefault(_player);
-
-var _draw = __webpack_require__(3);
-
-var _draw2 = _interopRequireDefault(_draw);
-
-var _blob = __webpack_require__(4);
-
-var _blob2 = _interopRequireDefault(_blob);
-
-var _effects = __webpack_require__(5);
-
-var _effects2 = _interopRequireDefault(_effects);
+var _keyboard2 = _interopRequireDefault(_keyboard);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Controller = function () {
-    function Controller() {
-        var _this = this;
+var Player = function () {
+    function Player(x, y) {
+        _classCallCheck(this, Player);
 
-        _classCallCheck(this, Controller);
-
-        this.mousePos = {
-            x: 0,
-            y: 0
+        // noinspection JSAnnotator
+        this.props = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            w: 10,
+            h: 10,
+            life: 100,
+            color: "rgb(255,0,0)"
         };
-        this.canvas = new _draw2.default();
-        this.player = new _player2.default();
-        this.key = new _keyview2.default();
-        this.effects = new _effects2.default();
-        this.blobs = [];
-        window.addEventListener("mousemove", function (e) {
-            _this.mousePos.x = e.clientX;
-            _this.mousePos.y = e.clientY;
-        });
-        this.graves = [];
-        this.loop();
+        this.key = new _keyboard2.default();
     }
 
-    _createClass(Controller, [{
-        key: "loop",
-        value: function loop() {
-            var _this2 = this;
+    _createClass(Player, [{
+        key: "draw",
+        value: function draw(context) {
+            context.fillStyle = this.props.color;
+            context.fillRect(this.props.x, this.props.y, this.props.w, this.props.h);
+        }
+    }, {
+        key: "move",
+        value: function move(control) {
 
-            this.canvas.clearScreen();
-            // this.canvas.showHp(this.player.checkHp());
-            if (this.player.checkHp() > 0) {
-                this.player.move(this.key.location);
-                this.canvas.draw(this.player.props);
-                if (this.blobs.length < 50) {
-                    // this.blobs.push(new Blob(100,100));
+            if (control.left && this.props.x <= window.innerWidth - window.innerWidth) {
+                this.props.x = 0;
+            } else if (control.left) {
+                this.props.x -= 5;
+                console.log(this.props.x);
+            }
 
-                    this.blobs.push(new _blob2.default(Math.random() * this.canvas.screenSize.x, Math.random() * this.canvas.screenSize.y));
-                }
+            if (control.right && this.props.x >= window.innerWidth - 20) {
+                this.props.x = window.innerWidth;
+            } else if (control.right === true) {
+                this.props.x += 5;
+                console.log(this.props.x);
+            }
 
-                this.blobs.forEach(function (blob) {
-                    var distPlayer = _this2.effects.getDistanceBetweenElements(_this2.player, blob);
-                    if (distPlayer < Math.floor(Math.random() * 300)) {
-                        blob.move(_this2.key.location);
-                    }
-                    if (blob.props.x > _this2.canvas.screenSize.x || blob.props.x < 0 || blob.props.y > _this2.canvas.screenSize.y || blob.props.y < 0) {
-                        blob.props.isDead = true;
-                    }
-                    _this2.canvas.draw(blob.props);
-                    var dead = _this2.player.collision(blob);
-                    if (dead) {
-                        // this.effects.placeGrave(blob.props);
-                        _this2.graves.push(blob);
-                        _this2.player.props.score++;
-                        _this2.player.props.size += blob.props.size * 0.1;
-                        _this2.player.props.color = blob.props.color;
-                        blob.props.isDead = true;
-                    }
-                });
+            if (control.down && this.props.y >= window.innerHeight - 10) {
+                this.props.y === window.innerHeight;
+            } else if (control.down) {
+                this.props.y += 5;
+                console.log(this.props.x);
+            }
+            if (control.up && this.props.y <= window.innerHeight - window.innerHeight) {
+                this.props.y === 0;
+            } else if (control.up) {
+                this.props.y -= 10;
+            }
+        }
 
-                this.graves.forEach(function (grave) {
-                    _this2.canvas.drawImage(grave.props.x, grave.props.y, "grave");
-                });
+        //   randomColor() {
+        //      return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+        // }
 
-                this.blobs = this.blobs.filter(function (blob) {
-                    return !blob.props.isDead;
-                });
-
-                window.requestAnimationFrame(function () {
-                    _this2.loop();
-                });
-            } // inside Loop But player dead.
-            else {// if player is dead.
-
-
-                }
+    }, {
+        key: "pos1",
+        get: function get() {
+            return {
+                x: this.props.x,
+                y: this.props.y
+            };
         }
     }]);
 
-    return Controller;
+    return Player;
 }();
 
-var c = new Controller();
+exports.default = Player;
+
+module.exports = Player;
 
 /***/ }),
 /* 2 */
@@ -258,86 +246,102 @@ var c = new Controller();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _keyview = __webpack_require__(0);
+var _enemy = __webpack_require__(3);
 
-var _keyview2 = _interopRequireDefault(_keyview);
+var _enemy2 = _interopRequireDefault(_enemy);
+
+var _player = __webpack_require__(1);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _keyboard = __webpack_require__(0);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Player = function () {
-    function Player() {
-        _classCallCheck(this, Player);
+var socket = io.connect('http://localhost:3000');
+socket.on('connect', function () {
+        socket.emit('join', 'Hello World from client');
+});
+socket.on('messages', function (data) {
+        alert(data);
+});
 
-        this.props = {
-            x: 10,
-            y: 10,
-            size: 20,
-            score: 3,
-            color: "rgb(255,0,0)",
-            uniqueID: new Date().valueOf() + Math.random()
-        };
-        this.key = new _keyview2.default();
-    }
+var Controller = function () {
+        function Controller() {
+                var _this = this;
 
-    _createClass(Player, [{
-        key: "move",
-        value: function move(movement) {
-            if (movement.left && this.props.x <= window.innerWidth - window.innerWidth) {
-                this.props.x === 0;
-            } else if (movement.left) {
-                this.props.x -= 10;
-            }
+                _classCallCheck(this, Controller);
 
-            if (movement.right && this.props.xPos >= window.innerWidth - 10) {
-                this.props.x === window.innerWidth;
-            } else if (movement.right === true) {
-                this.props.x += 10;
-            }
+                this.player = [];
+                this.enemy = [];
 
-            if (movement.down && this.props.y >= window.innerHeight - 10) {
-                this.props.y === window.innerHeight;
-            } else if (movement.down) {
-                this.props.y += 10;
-            }
+                this.canvas = document.querySelector("#myCanvas");
+                this.context = this.canvas.getContext("2d");
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
 
-            if (movement.up && this.props.y <= window.innerHeight - window.innerHeight) {
-                this.props.y === 0;
-            } else if (movement.up) {
-                this.props.y -= 10;
-            }
-            this.collision();
+                this.keydown = new _keyboard2.default();
+                this.player = new _player2.default();
+                this.enemy = new _enemy2.default();
+
+                window.addEventListener("mousemove", function (e) {
+                        _this.mousePos.x = e.clientX;
+                        _this.mousePos.y = e.clientY;
+                });
+                this.mousePos = {
+                        x: 0,
+                        y: 0
+                };
+
+                this.loop();
         }
-    }, {
-        key: "collision",
-        value: function collision(collider) {
-            if (!collider) return;
-            if (collider.props.x + collider.props.size >= this.props.x && collider.props.x <= this.props.x + this.props.size && collider.props.y + collider.props.size >= this.props.y && collider.props.y <= this.props.y + this.props.size) {
-                return true;
-            }
-            return false;
-        }
-    }, {
-        key: "checkHp",
-        value: function checkHp() {
-            return this.props.score;
-        }
-    }, {
-        key: "pLocation",
-        get: function get() {
-            return {
-                x: this.props.x + "",
-                y: this.props.y + "",
-                size: this.props.size
-            };
-        }
-    }]);
 
-    return Player;
+        _createClass(Controller, [{
+                key: "loop",
+                value: function loop() {
+                        var _this2 = this;
+
+                        //clear the canvas
+                        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                        if (this.player.props.x !== this.old_posX || this.player.props.y !== this.old_posY) {
+                                this.old_posX = this.player.props.x;
+                                this.old_posY = this.player.props.y;
+
+                                socket.emit('location', this.player.props.x, this.player.props.y);
+                                console.log(this.player.props.old_posX);
+                                console.log(this.player.props.old_posX);
+                        }
+
+                        this.enemy.props.dist.x = this.enemy.props.x - this.player.props.x;
+                        this.enemy.props.dist.y = this.enemy.props.y - this.player.props.y;
+
+                        //  console.log(this.player.length);
+                        //  console.log(this.rect.length);
+                        //  console.log(this.dots.length);
+
+
+                        this.enemy.move();
+                        this.enemy.draw(this.context);
+
+                        //spawn Le player
+                        this.player.move(this.keydown.location);
+                        this.player.draw(this.context);
+
+                        window.requestAnimationFrame(function () {
+                                _this2.loop();
+                        });
+                }
+        }]);
+
+        return Controller;
 }();
 
-module.exports = Player;
+var c = new Controller();
 
 /***/ }),
 /* 3 */
@@ -352,194 +356,83 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _player = __webpack_require__(1);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _keyboard = __webpack_require__(0);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Canvas = function () {
-    function Canvas() {
-        _classCallCheck(this, Canvas);
+var Enemy = function () {
+    function Enemy(x, y) {
+        _classCallCheck(this, Enemy);
 
-        this.screenSize = {
-            x: window.innerWidth,
-            y: window.innerHeight
-        };
-        this.canvas = document.querySelector("#myCanvas");
-        this.context = this.canvas.getContext("2d");
-        this.font = "30px Arial";
-        this.canvas.width = this.screenSize.x;
-        this.canvas.height = this.screenSize.y;
+        this.props = {
+            x: 0,
+            y: 0,
+            dist: {
+                x: 0,
+                y: 0
+            },
+            drag: Math.random() * 0.1 - 1,
+            speed: 1,
+            w: 100,
+            h: 100,
+            life: 100,
+            damage: 33.6,
+            color: "rgb(50,0,50)"
+
+        }, this.player = [x, y];
+        this.keydown = new _keyboard2.default();
+        this.player = new _player2.default();
     }
 
-    _createClass(Canvas, [{
-        key: "clearScreen",
-        value: function clearScreen() {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            // this.context.fillStyle = "rgb(0,255,0)";
-            // this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
+    _createClass(Enemy, [{
+        key: "move",
+        value: function move() {
+
+            //  console.log("distance-X "+ this.props.dist.x);
+            //console.log("distance-Y "+ this.props.dist.y);
+
+            if (this.props.dist.x > 5) {
+                this.props.x -= this.props.speed;
+            } else {
+                this.props.x += this.props.speed;
+            }
+            if (this.props.dist.y > 5) {
+                this.props.y -= this.props.speed;
+            } else {
+                this.props.y += this.props.speed;
+            }
+            if (this.props.dist.y < 5) {
+                this.props.y;
+            }
         }
     }, {
         key: "draw",
-        value: function draw(props) {
-            this.context.beginPath();
-            this.context.arc(props.x, props.y, props.size, 0, 2 * Math.PI);
-            this.context.fillStyle = props.color;
-            this.context.stroke();
-            this.context.fill();
+        value: function draw(context) {
+            context.fillStyle = this.props.color;
+            context.fillRect(this.props.x, this.props.y, this.props.w, this.props.h);
         }
     }, {
-        key: "drawImage",
-        value: function drawImage(x, y, imgsrc) {
-            var img = document.getElementById("grave");
-            this.context.drawImage(img, x - 45, y - 30, 90, 60);
+        key: "drag",
+        value: function drag() {
+            math.random() * 1 - 2;
         }
     }]);
 
-    return Canvas;
+    return Enemy;
 }();
 
-exports.default = Canvas;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+exports.default = Enemy;
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Blob = function () {
-    function Blob(x, y) {
-        _classCallCheck(this, Blob);
-
-        this.props = {
-            x: x,
-            y: y,
-            color: this.randomColor(),
-            size: this.randomSize(),
-            isDead: false,
-            vel: {
-                x: 0.1,
-                y: 0.1
-            },
-            acceleration: 0.75
-
-        };
-    }
-
-    _createClass(Blob, [{
-        key: 'move',
-        value: function move(movement) {
-
-            if (movement.left) {
-                this.props.x -= this.props.vel.x;
-                this.props.vel.x -= this.props.acceleration;
-            }
-
-            if (movement.right) {
-                this.props.x += this.props.vel.x;
-                this.props.vel.x += this.props.acceleration;
-            }
-
-            if (movement.down) {
-                this.props.y -= this.props.vel.y;
-                this.props.vel.y -= this.props.acceleration;
-            }
-
-            if (movement.up) {
-                this.props.y += this.props.vel.y;
-                this.props.vel.y += this.props.acceleration;
-            }
-        }
-    }, {
-        key: 'randomColor',
-        value: function randomColor() {
-            return 'rgb(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ')';
-        }
-    }, {
-        key: 'randomSize',
-        value: function randomSize() {
-            return Math.floor(Math.random() * 10 + 5);
-        }
-    }]);
-
-    return Blob;
-}();
-
-exports.default = Blob;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Effects = function () {
-    function Effects() {
-        _classCallCheck(this, Effects);
-    }
-
-    _createClass(Effects, [{
-        key: "fadeIn",
-        value: function fadeIn(el, time) {
-            el.style.opacity = 0;
-            el.style.display = "block";
-
-            var last = +new Date();
-            var tick = function tick() {
-                el.style.opacity = +el.style.opacity + (new Date() - last) / time;
-                last = +new Date();
-
-                if (+el.style.opacity < 0.7) {
-                    window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
-                }
-            };
-
-            tick();
-        }
-    }, {
-        key: "getDistanceBetweenElements",
-        value: function getDistanceBetweenElements(a, b) {
-            var aX = a.props.x + a.props.size / 2;
-            var bX = b.props.x + b.props.size / 2;
-            var aY = a.props.y + b.props.size / 2;
-            var bY = b.props.y + b.props.size / 2;
-
-            return Math.sqrt(Math.pow(aX - bX, 2) + Math.pow(aY - bY, 2));
-        }
-    }, {
-        key: "placeGrave",
-        value: function placeGrave(pos) {
-            var graveImg = document.createElement("img");
-            graveImg.setAttribute('src', '../img/Grave.png');
-            graveImg.setAttribute('class', 'img');
-            graveImg.setAttribute("id", "grave");
-            graveImg.style.left = pos.x - 45 + "px";
-            graveImg.style.top = pos.y - 30 + "px";
-            document.body.appendChild(graveImg);
-            this.fadeIn(graveImg, 5000);
-            return pos;
-        }
-    }]);
-
-    return Effects;
-}();
-
-exports.default = Effects;
+module.exports = Enemy;
 
 /***/ })
 /******/ ]);

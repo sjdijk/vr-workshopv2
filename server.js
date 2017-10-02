@@ -1,16 +1,30 @@
-let express = require('express');
-let app = express();
-// Allow Cross-Origin requests, just leave this as is
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+var express = require('express');
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
+app.use(express.static(__dirname + '/client'));
+
+app.get('/', function(req, res,next) {
+    res.sendFile('/index.html');
 });
 
-let server = require('http').createServer();
-let io = require('socket.io')(server);
-io.on('connection', function(client){
-    client.on('event', function(data){});
-    client.on('disconnect', function(){});
+io.on('connection', function(client) {
+    console.log('Client connected...');
+
+    client.on('join', function(data) {
+        console.log(data);
+        client.emit('messages', 'You are connected');
+    });
+
+    client.on('location', function(data){
+        if(data !== null){
+            console.log(data);
+
+        }
+    });
+
+
 });
+
 server.listen(3000);
