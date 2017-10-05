@@ -10,3 +10,4 @@ This will get you up and running with a very basic Node server.
  * Run `node server.js` to start node with **server.js** attached
  * Open **client/index.html** and see the glorious Hello World!
  * Pressing Ctrl + C closes node "# Game_jame" 
+"# Game_jame" 
