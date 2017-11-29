@@ -1,7 +1,7 @@
 {
-  "name": "Node_Multiplayer_game",
+  "name": "Aframe workshop",
   "version": "1.0.0",
-  "description": "MP es8 game",
+  "description": "Workshop Stefan J van Dijk A-frame instap",
   "main": "server.js",
   "scripts": {
     "start": "webpack --watch && node server.js"
